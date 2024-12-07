@@ -46,7 +46,7 @@ List 3 different data types that can be used with protocol buffers
 
 ## Hello World Application
 
-**Using this tutorial:** https://intuting.medium.com/implement-grpc-service-using-java-gradle-7a54258b60b8
+**Using this [tutorial](https://intuting.medium.com/implement-grpc-service-using-java-gradle-7a54258b60b8)** 
 
 ### Gradle
 
