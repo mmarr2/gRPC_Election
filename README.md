@@ -1,6 +1,4 @@
-
-
-## Questions
+# Questions
 
 What is gRPC and why does it work accross languages and platforms?
 
@@ -44,11 +42,11 @@ List 3 different data types that can be used with protocol buffers
 - bool
 - int32
 
-## Hello World Application
+# Hello World Application
 
-**Using this [tutorial](https://intuting.medium.com/implement-grpc-service-using-java-gradle-7a54258b60b8)** 
+**Using this tutorial:** https://intuting.medium.com/implement-grpc-service-using-java-gradle-7a54258b60b8
 
-### Gradle
+## Gradle
 
 Added these lines to the `gradle.build` file: 
 
@@ -107,7 +105,7 @@ sourceSets {
 }
 ```
 
-### Proto File
+## Proto File
 
 Add a `proto` file in the `src/main/proto` directory. 
 
@@ -130,16 +128,64 @@ message HelloResponse {
 
 Then run `./gradlew build` to generate classes. They can be found in `build/generated/source/proto/main` 
 
-### Server and Client.
+## Server and Client.
 
 Using the `HelloWorldServiceImplBase` class that was generated, you can make a `HelloWorldServiceImpl`
 
 class. The method `hello()`  needs to be overridden. The next step is to to add a `HelloWorldServer` to run the gRPC service. 
 
-### Problems
+## Problems
 
 I had the whole project in a OneDrive environment, which caused a few issues with Gradle. To resolve this problem, I simply moved the project to a directory, that isn’t backed up by OneDrive. 
 
-## ElectionData
+# ElectionData
 
-To transfer election data through gRPC, a few parts of the program need to be modified. The `.proto` file has to be changed, to allow more variables. Additionally, the Client and Server classes need to be adjusted, so they can handle the data.
+To transfer election data through gRPC, a few parts of the program need to be modified. The `.proto` file has to be changed, to allow more variables. Additionally, the Client and Server classes need to be adjusted, so they can handle the data. 
+
+The `.proto` file now looks like this: 
+
+```protobuf
+syntax = "proto3";
+
+service ElectionDataService {
+  rpc sendElectionData(ElectionData) returns (ElectionResponse){}
+}
+
+message ElectionData {
+  string regionID = 1;
+  string regionName = 2;
+  string regionAddress = 3;
+  string regionPostalCode = 4;
+  string federalState = 5;
+  int32 oevpVotes = 6;
+  int32 spoeVotes = 7;
+  int32  fpoeVotes = 8;
+  int32 grueneVotes = 9;
+  int32 neosVotes = 10;
+  string timetstamp = 11;
+
+}
+
+message ElectionResponse {
+  string status = 1;
+  string message = 2;
+}
+```
+
+# EK
+
+As my second language I want to use Python. First, I need to install the necessary tools: 
+
+```powershell
+pip install grpcio grpcio-tools
+```
+
+Then the `.proto` file needs to be defined. I will be using the same one as before. 
+
+Then run this command in the same directory as the `.proto` file. 
+
+```powershell
+python -m grpc_tools.protoc -I. --python_out=. --grpc_python_out=. election.proto
+```
+
+Then define a server and a client in two different files. To execute them. , run `python server.py` in one terminal and `python client.py`  in the other.
